@@ -163,7 +163,20 @@ def main():
         run_cache_inference(BENCHMARK_DATASET),
         run_gptcache_benchmark(BENCHMARK_DATASET)
     ]
-    print(tabulate(results, headers="keys", tablefmt="github"))
+    table_str = tabulate(results, headers="keys", tablefmt="github")
+    print(table_str)
+
+    # Save to benchmark_results.json
+    with open("benchmark_results.json", "w", encoding="utf-8") as f:
+        json.dump(results, f, indent=2)
+
+    # Save to benchmark_results.md
+    with open("benchmark_results.md", "w", encoding="utf-8") as f:
+        f.write("# CacheInference — Benchmark Results\n\n")
+        f.write("## Performance Comparison Table\n\n")
+        f.write(table_str + "\n")
+    
+    print("\nBenchmark results saved to 'benchmark_results.md' and 'benchmark_results.json'")
 
 if __name__ == "__main__":
     main()
