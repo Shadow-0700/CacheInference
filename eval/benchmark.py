@@ -1,6 +1,13 @@
 import time
 import json
+import sys
+import os
+from pathlib import Path
 from typing import List, Dict, Any
+
+# Ensure parent directory is in python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from tabulate import tabulate
 
 from cache.exact_cache import ExactCache
