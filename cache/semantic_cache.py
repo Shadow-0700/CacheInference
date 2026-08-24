@@ -9,10 +9,10 @@ from fastembed import TextEmbedding  # type: ignore
 from typing import Optional, Tuple, Dict, Any
 
 class SemanticCache:
-    def __init__(self, dim: int = 384, max_elements: int = 10000, model_name: str = "BAAI/bge-small-en-v1.5"):
+    def __init__(self, dim: int = 384, max_elements: int = 10000, model_name: str = "BAAI/bge-small-en-v1.5", threads: Optional[int] = 8):
         self.dim = dim
         self.max_elements = max_elements
-        self.model = TextEmbedding(model_name=model_name)
+        self.model = TextEmbedding(model_name=model_name, threads=threads)
         
         self.has_hnsw = HAS_HNSWLIB
         if self.has_hnsw:
