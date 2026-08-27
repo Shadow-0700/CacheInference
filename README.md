@@ -107,9 +107,49 @@ curl -X POST http://localhost:8000/v1/chat/completions \
 
 ---
 
+## Project Structure
+
+```
+CacheInference/
+├── cache/                  # Core in-memory caching engines
+│   ├── exact_cache.py      # SHA-256 hash-based prompt cache
+│   └── semantic_cache.py   # FastEmbed + HNSWLib cosine similarity cache
+├── eval/                   # Benchmarking & evaluation suites
+│   ├── benchmark.py        # Baseline vs CacheInference vs GPTCache
+│   ├── eval_cachebench.py  # Full 2,000-pair CacheEval runner
+│   ├── eval_cachebench_fast.py # Fast stratified CacheEval suite
+│   ├── eval_harness.py     # Evaluation metrics engine
+│   ├── cachebench.jsonl    # Ground truth dataset
+│   └── benchmark_results.json
+├── docs/                   # Documentation & benchmark reports
+│   ├── SPEC (1).md         # Original specification
+│   ├── benchmark_results.md# General benchmark report
+│   └── cacheeval_report.md # Full 2,000-pair CacheEval domain breakdown
+├── docker/                 # Deployment definitions
+│   ├── Dockerfile
+│   └── docker-compose.yml
+├── main.py                 # FastAPI reverse proxy (/v1/chat/completions)
+├── config.py               # Environment variables and threshold loader
+├── upstream.py             # SSE streaming forwarder & LLM verification judge
+├── logger.py               # JSONL structured request logger
+├── requirements.txt        # Project dependencies
+├── .env.example            # Environment configuration template
+└── README.md               # Main documentation
+```
+
+---
+
 ## Running Benchmarks
 
-Run the benchmark suite:
+### 1. General Comparison Benchmark (Ours vs Baseline vs GPTCache)
 ```bash
-python benchmark.py
+python eval/benchmark.py
 ```
+*(Results saved in `docs/benchmark_results.md`)*
+
+### 2. Full 2,000-Pair CacheEval Suite
+```bash
+python eval/eval_cachebench.py
+```
+*(Results saved in `docs/cacheeval_report.md`)*
+
