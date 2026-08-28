@@ -115,12 +115,10 @@ CacheInference/
 │   ├── exact_cache.py      # SHA-256 hash-based prompt cache
 │   └── semantic_cache.py   # FastEmbed + HNSWLib cosine similarity cache
 ├── eval/                   # Benchmarking & evaluation suites
+│   ├── eval_comparison_2000.py # Full 2,000-pair comparison runner
 │   ├── benchmark.py        # Baseline vs CacheInference vs GPTCache
-│   ├── eval_cachebench.py  # Full 2,000-pair CacheEval runner
-│   ├── eval_cachebench_fast.py # Fast stratified CacheEval suite
 │   ├── eval_harness.py     # Evaluation metrics engine
-│   ├── cachebench.jsonl    # Ground truth dataset
-│   └── benchmark_results.json
+│   └── cachebench.jsonl    # Ground truth 2,000-row dataset
 ├── docs/                   # Documentation & benchmark reports
 │   ├── PROJECT_OVERVIEW.md # Architecture & technical workflow
 │   ├── cacheeval_comparison_report.md # Head-to-head 2,000-row comparison
@@ -148,9 +146,8 @@ python eval/eval_comparison_2000.py
 ```
 *(Results saved in `docs/cacheeval_comparison_report.md`)*
 
-### 2. Full 2,000-Pair CacheEval Evaluation
+### 2. General Prompt Evaluation Suite
 ```bash
-python eval/eval_cachebench.py
+python eval/benchmark.py
 ```
-*(Results saved in `docs/cacheeval_report.md`)*
 
