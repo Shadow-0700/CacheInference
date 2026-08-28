@@ -122,9 +122,10 @@ CacheInference/
 │   ├── cachebench.jsonl    # Ground truth dataset
 │   └── benchmark_results.json
 ├── docs/                   # Documentation & benchmark reports
-│   ├── SPEC (1).md         # Original specification
-│   ├── benchmark_results.md# General benchmark report
-│   └── cacheeval_report.md # Full 2,000-pair CacheEval domain breakdown
+│   ├── PROJECT_OVERVIEW.md # Architecture & technical workflow
+│   ├── cacheeval_comparison_report.md # Head-to-head 2,000-row comparison
+│   ├── cacheeval_report.md # Full 2,000-pair CacheEval domain breakdown
+│   └── SPEC (1).md         # Original specification
 ├── docker/                 # Deployment definitions
 │   ├── Dockerfile
 │   └── docker-compose.yml
@@ -141,13 +142,13 @@ CacheInference/
 
 ## Running Benchmarks
 
-### 1. General Comparison Benchmark (Ours vs Baseline vs GPTCache)
+### 1. 2,000-Row CacheEval Head-to-Head Comparison (Ours vs GPTCache)
 ```bash
-python eval/benchmark.py
+python eval/eval_comparison_2000.py
 ```
-*(Results saved in `docs/benchmark_results.md`)*
+*(Results saved in `docs/cacheeval_comparison_report.md`)*
 
-### 2. Full 2,000-Pair CacheEval Suite
+### 2. Full 2,000-Pair CacheEval Evaluation
 ```bash
 python eval/eval_cachebench.py
 ```
