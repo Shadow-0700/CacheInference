@@ -43,9 +43,10 @@ Client Request
 
 ---
 
-## Benchmark Results (2,000-Row CacheEval Testbed)
+## Benchmark Results
 
-Evaluated on the standardized **[BudEcosystem/CacheEval](https://github.com/BudEcosystem/CacheEval)** 2,000-pair dataset across 10 domains (*code, math, qa_factual, qa_open, conversational, tool, creative, personalized, multi_turn, multilingual*):
+### 1. Primary Benchmark: 2,000-Row CacheEval Suite (Calibrated)
+Evaluated on the standardized **[BudEcosystem/CacheEval](https://github.com/BudEcosystem/CacheEval)** 2,000-pair benchmark across 10 domains (*code, math, qa_factual, qa_open, conversational, tool, creative, personalized, multi_turn, multilingual*):
 
 | Metric | CacheInference (Ours) | GPTCache (Standard) | Advantage / Impact |
 |---|---|---|---|
@@ -53,12 +54,29 @@ Evaluated on the standardized **[BudEcosystem/CacheEval](https://github.com/BudE
 | **Overall Accuracy** | **90.0%** | 57.5% | **+32.5% higher** |
 | **Precision** | **80.7%** | 43.0% | **+37.7% higher** |
 | **Recall (Equivalent Hit Rate)** | **92.4%** | 79.7% | **+12.7% higher** |
-| **False-Hit Rate (Safety)** | **11.2%** | 53.8% | **42.6% safer** (eliminates false hits) |
+| **False-Hit Rate (Safety FHR)** | **11.2%** | 53.8% | **42.6% safer** (meets the $\le 15\%$ safety target) |
 | **F1 Score** | **0.862** | 0.559 | **+0.303** |
 | **Decision Latency (p50)** | 24.30 ms | 3.50 ms | GPTCache is faster but serves wrong answers |
-| **Decision Cost (per 1k)** | $0.0213 | $0.0000 | < $0.03 per 1,000 queries |
+| **Decision Cost (per 1k)** | $0.0213 | $0.0000 | < $0.03 per 1,000 decisions |
 
-> **Key Takeaway:** Standard vector caches like GPTCache suffer a **53.8% False-Hit Rate** on adversarial pairs (e.g. `x+2=8` vs `a+2=8` or directional swaps `NYC→FL` vs `FL→NYC`). CacheInference’s **Verification Judge Tier** brings overall accuracy to **90.0%** and true equivalent recall to **92.4%**. Full breakdown in [`docs/cacheeval_comparison_report.md`](docs/cacheeval_comparison_report.md).
+> **Key Takeaway:** Standard vector caches like GPTCache suffer a **53.8% False-Hit Rate** on adversarial pairs (e.g. `x+2=8` vs `a+2=8` or directional swaps `NYC→FL` vs `FL→NYC`). CacheInference’s **Verification Judge Tier** brings overall accuracy to **90.0%** and true equivalent recall to **92.4%**, keeping FHR well within the safe $\le 15\%$ target. Full breakdown in [`docs/cacheeval_comparison_report.md`](docs/cacheeval_comparison_report.md).
+
+---
+
+### 2. Secondary Benchmark: 5,000-Prompt LMSYS Chatbot Arena Stress Test
+A secondary generalization evaluation on open-domain, uncalibrated Chatbot Arena conversational traffic:
+
+| Metric | CacheInference (Ours) | GPTCache (Standard) | No-Cache Baseline |
+|---|---|---|---|
+| **Total Queries** | 5,000 | 5,000 | 5,000 |
+| **Classification Accuracy** | **79.2%** | 69.6% | 0.0% |
+| **Cache Hit Rate** | **83.1%** | 99.5% | 0.0% |
+| **False-Hit Rate (FHR)** | **25.0%** | 30.5% | 0.0% |
+| **Average Latency** | **60.69 ms** | 3.06 ms | 360.22 ms |
+| **API Cost Saved** | **82.5%** ($0.35 total) | 99.5% ($0.01) | 0.0% ($2.00) |
+
+> **Generalization Finding:** On uncalibrated open-domain conversation traffic, static similarity thresholds exhibit an expected generalization gap (FHR rises from 11.2% on calibrated domains to 25.0% under extreme conversational drift, while GPTCache degrades past 30.5%). This demonstrates why **per-deployment threshold calibration** and **uncertainty-based routing** are essential in production to consistently hold the **$\le 15\%$ False-Hit Rate safety line**.
+
 
 
 ---
